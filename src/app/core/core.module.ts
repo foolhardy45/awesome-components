@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 
 
+
 @NgModule({
   declarations: [
     HeaderComponent
@@ -13,10 +14,10 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
   ]
 })
 export class CoreModule { }
