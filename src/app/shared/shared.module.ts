@@ -7,6 +7,7 @@ import {ShortenPipe} from './pipes/shorten.pipe';
 import {UsernamePipe} from './pipes/username.pipe';
 import {TimeAgoPipe} from './pipes/timeAgo.pipe';
 import {HighlightDirective} from './directives/highlight.directive';
+import {MatLine} from '@angular/material/core';
 
 
 
@@ -22,6 +23,7 @@ import {HighlightDirective} from './directives/highlight.directive';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
+    MatLine,
 
   ],
   exports: [
