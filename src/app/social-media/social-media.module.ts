@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { SocialMediaRoutingModule } from './social-media-routing.module';
-import { PostsService } from './service/posts.service';
-import { PostsResolver } from './resolvers/posts.resolver';
-import { PostListComponent } from './components/post-list/post-list.component';
-import { PostListItemComponent } from './components/post-list-item/post-list-item.component';
-import { share } from 'rxjs';
-import { SharedModule } from '../shared/shared.module';
+import {SocialMediaRoutingModule} from './social-media-routing.module';
+import {PostsService} from './service/posts.service';
+import {PostsResolver} from './resolvers/posts.resolver';
+import {PostListComponent} from './components/post-list/post-list.component';
+import {PostListItemComponent} from './components/post-list-item/post-list-item.component';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -25,4 +24,5 @@ import { SharedModule } from '../shared/shared.module';
     PostsResolver,
   ]
 })
-export class SocialMediaModule { }
+export class SocialMediaModule {
+}

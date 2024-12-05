@@ -1,7 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Comment } from '../../../core/models/comment.model';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import {animate, animation, state, style, transition, trigger} from '@angular/animations';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Comment} from '../../../core/models/comment.model';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {
+  animate,
+  animateChild,
+  group,
+  query,
+  stagger,
+  state,
+  style,
+  transition,
+  trigger,
+  useAnimation
+} from '@angular/animations';
+import {flashAnimation} from '../../animations/flash.animation';
+import {slideAndFaceAnimation} from '../../animations/slide-and-face.animation';
 
 @Component({
   selector: 'app-comments',
@@ -9,12 +22,12 @@ import {animate, animation, state, style, transition, trigger} from '@angular/an
   styleUrl: './comments.component.scss',
   animations: [
     trigger('listItem', [
-      state('default',style({
+      state('default', style({
         transform: 'scale(1)',
         'background-color': 'white',
         'z-index': 1
       })),
-      state('active',style({
+      state('active', style({
         transform: 'scale(1.05)',
         'background-color': 'rgb(201,157,242)',
         'z-index': 2
@@ -22,22 +35,50 @@ import {animate, animation, state, style, transition, trigger} from '@angular/an
       transition('default => active', [
         animate('100ms ease-in-out')
       ]),
-      transition('active => default',[
+      transition('active => default', [
         animate('500ms ease-in-out')
       ]),
       transition('void => *', [
-        style({
-          transform: 'translateX(-100%)',
-          opacity:0,
-          'background-color': 'rgb(201,157,242)'
+        query('.comment-text, .comment-date', [
+          style({
+            opacity: 0
+          })
+        ]),
+        useAnimation(slideAndFaceAnimation, {
+          params: {
+            time: '500ms',
+            startColor: 'rgb(201,157,242)'
+          }
         }),
-        animate('250ms ease-out', style({
-          transform: 'translateX(0)',
-          opacity:1,
-          'background-color': 'white',
-        }))
+        group([
+          useAnimation(flashAnimation, {
+            params: {
+              time: '250ms',
+              flashColor: 'rgb(249,179,111)'
+            }
+          }),
+          query('.comment-text', [
+            animate('250ms', style({
+              opacity: 1
+            }))
+          ]),
+          query('.comment-date', [
+            animate('500ms', style({
+              opacity: 1
+            }))
+          ]),
+        ]),
       ])
-    ])
+    ]),
+    trigger('list', [
+      transition('void => *', [
+        query('@listItem', [
+          stagger(50, [
+            animateChild()
+          ])
+        ])
+      ]),
+    ]),
   ]
 })
 export class CommentsComponent implements OnInit {
@@ -46,24 +87,25 @@ export class CommentsComponent implements OnInit {
   @Output() newComment = new EventEmitter<string>();
 
   commentCtrl!: FormControl;
-  listItemAnimationState: 'default' | 'active' = 'default';
-  animationStates: {[key: number]: 'default' | 'active'} = {
-    0:'default',
-    1:'default',
-    2:'default'
+  animationStates: { [key: number]: 'default' | 'active' } = {
+    0: 'default',
+    1: 'default',
+    2: 'default'
   };
 
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.commentCtrl = this.formBuilder.control('', [Validators.required, Validators.minLength(10)]);
-    for(let index in this.comments){
+    for (let index in this.comments) {
       this.animationStates[index] = 'default';
     }
   }
-  onLeaveComment(){
-    if(this.commentCtrl.invalid){
+
+  onLeaveComment() {
+    if (this.commentCtrl.invalid) {
       return;
     }
     const maxId = Math.max(...this.comments.map(comment => comment.id));
@@ -77,11 +119,11 @@ export class CommentsComponent implements OnInit {
     this.commentCtrl.reset();
   }
 
-  onListItemMouseEnter(index: number){
+  onListItemMouseEnter(index: number) {
     this.animationStates[index] = 'active';
   }
 
-  onListItemMouseLeave(index: number){
+  onListItemMouseLeave(index: number) {
     this.animationStates[index] = 'default';
   }
 }
