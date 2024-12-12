@@ -6,9 +6,10 @@ import {environment} from "../../../environments/environment";
 
 @Injectable()
 export class ComplexFormService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  saveUserInfo(formValue: ComplexFormValue): Observable<boolean>{
+  saveUserInfo(formValue: ComplexFormValue): Observable<boolean> {
     return this.http.post(`${environment.apiUrl}/user`, formValue).pipe(
       map(() => true),
       delay(1000),

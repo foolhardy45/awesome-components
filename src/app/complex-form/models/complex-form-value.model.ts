@@ -1,4 +1,4 @@
-export class ComplexFormValue{
+export class ComplexFormValue {
   personalInfo!: {
     firstName: string,
     lastName: string,
@@ -9,7 +9,7 @@ export class ComplexFormValue{
     confirm: string
   };
   phone?: string;
-  loginInfo!:{
+  loginInfo!: {
     username: string,
     passworld: string,
     confirmPassword: string,

@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ComplexFormRoutingModule } from './complex-form-routing.module';
-import { ComplexFormComponent } from './components/complex-form/complex-form.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ComplexFormRoutingModule} from './complex-form-routing.module';
+import {ComplexFormComponent} from './components/complex-form/complex-form.component';
 import {SharedModule} from '../shared/shared.module';
 import {ComplexFormService} from "./services/complex-form.service";
 
@@ -16,7 +16,8 @@ import {ComplexFormService} from "./services/complex-form.service";
     SharedModule
   ],
   providers: [
-      ComplexFormService,
+    ComplexFormService,
   ]
 })
-export class ComplexFormModule { }
+export class ComplexFormModule {
+}
