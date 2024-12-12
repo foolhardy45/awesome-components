@@ -10,7 +10,7 @@ export class ComplexFormService {
   }
 
   saveUserInfo(formValue: ComplexFormValue): Observable<boolean> {
-    return this.http.post(`${environment.apiUrl}/user`, formValue).pipe(
+    return this.http.post(`${environment.apiUrl}/users`, formValue).pipe(
       map(() => true),
       delay(1000),
       catchError(() => of(false).pipe(delay(1000)))

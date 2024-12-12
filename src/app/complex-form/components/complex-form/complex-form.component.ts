@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable, startWith, tap} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {ComplexFormService} from '../../services/complex-form.service';
+import {validValidator} from '../../validators/valid.validator';
 
 @Component({
   selector: 'app-complex-form',
@@ -23,7 +25,9 @@ export class ComplexFormComponent implements OnInit {
   showEmailCtrl$!: Observable<boolean>;
   showPhoneCtrl$!: Observable<boolean>;
 
-  constructor(private formBuilder: FormBuilder) {
+  loading = false;
+
+  constructor(private formBuilder: FormBuilder , private complexFormService: ComplexFormService) {
   }
 
   ngOnInit() {
@@ -31,10 +35,6 @@ export class ComplexFormComponent implements OnInit {
     this.initMainForm();
     this.initFormObservables();
 
-  }
-
-  onSubmitForm() {
-    console.log(this.mainForm.value);
   }
 
   private initMainForm() {
@@ -54,6 +54,7 @@ export class ComplexFormComponent implements OnInit {
     });
     this.contactPreferenceCtrl = this.formBuilder.control('email');
     this.emailCtrl = this.formBuilder.control('');
+    //this.emailCtrl.addValidators([Validators.required,Validators.email, validValidator()]);
     this.confirmEmailCtrl = this.formBuilder.control('');
     this.emailForm = this.formBuilder.group({
       email: this.emailCtrl,
@@ -115,5 +116,41 @@ export class ComplexFormComponent implements OnInit {
       this.phoneCtrl.clearValidators();
     }
     this.phoneCtrl.updateValueAndValidity();
+  }
+
+  getFormControlErrorText(ctrl: AbstractControl){
+    if(ctrl.hasError('required')) {
+      return 'Ce champ est requis';
+    } else if(ctrl.hasError('email')){
+      return 'Merci d\'entrer une adresse mail valide';
+    }else if(ctrl.hasError('minlength')){
+      return 'Ce numéro de téléphone ne contient pas assez de chiffres';
+    }else if(ctrl.hasError('maxlength')){
+      return 'Ce numéro de téléphone contient trop de chiffres';
+    }else{
+      return 'Ce champ contient une erreur';
+    }
+  }
+
+
+
+  onSubmitForm() {
+    this.loading = true;
+    this.complexFormService.saveUserInfo(this.mainForm.value).pipe(
+      tap(saved => {
+        this.loading = false;
+        if (saved) {
+          this.resetForm();
+        } else {
+          console.error('Echec de l\'enregistrement');
+        }
+      })
+    ).subscribe();
+
+  }
+
+  private resetForm() {
+    this.mainForm.reset();
+    this.contactPreferenceCtrl.patchValue('email');
   }
 }
