@@ -36,7 +36,9 @@
         <mat-error>{{ getFormControlErrorText(emailCtrl)}}</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showEmailError$ | async">Les deux adresse ne correspondent pas</small>
   </mat-card>
+
   <mat-card *ngIf="showPhoneCtrl$ | async" class="form-card">
     <mat-card-subtitle>Téléphone</mat-card-subtitle>
     <mat-form-field appearance="fill">
@@ -64,6 +66,7 @@
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showPasswordError$ | async">Les deux mots de passe ne correspondent pas</small>
   </mat-card>
   <mat-card-actions *ngIf="mainForm.valid">
     <button mat-flat-button color="primary"

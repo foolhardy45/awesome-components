@@ -11,6 +11,8 @@ const routes: Routes = [
     path: 'social-media',
     loadChildren: () => import('./social-media/social-media.module').then(m => m.SocialMediaModule)
   },
+  {path: 'reactive-state',loadChildren: ()=> import('./reactive-state/reactive-state.module').then(m => m.ReactiveStateModule)
+  },
   {path: '**', redirectTo: 'social-media'}
 ];
 
